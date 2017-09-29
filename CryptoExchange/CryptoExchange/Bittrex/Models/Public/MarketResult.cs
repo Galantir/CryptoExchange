@@ -7,6 +7,6 @@ namespace CryptoExchange.Bittrex.Models.Public
     {
         public bool success { get; set; }
         public string message { get; set; }
-        public List<Market> result { get; set; }
+        public List<CryptoMarket> result { get; set; }
     }
 }

@@ -46,16 +46,40 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Auth.cs" />
     <Compile Include="Bittrex\BittrexExchange.cs" />
+    <Compile Include="Bittrex\Models\Account\BalanceResult.cs" />
+    <Compile Include="Bittrex\Models\Account\BalancesResult.cs" />
+    <Compile Include="Bittrex\Models\Account\OrderHistoryResult.cs" />
+    <Compile Include="Bittrex\Models\Account\OrderResult.cs" />
+    <Compile Include="Bittrex\Models\Market\BuyLimitResult.cs" />
+    <Compile Include="Bittrex\Models\Market\CancelResult.cs" />
+    <Compile Include="Bittrex\Models\Market\OpenOrdersResult.cs" />
+    <Compile Include="Bittrex\Models\Market\SellLimitResult.cs" />
+    <Compile Include="Bittrex\Models\Public\CurrencyResult.cs" />
+    <Compile Include="Bittrex\Models\Public\MarketHistoryResult.cs" />
+    <Compile Include="Bittrex\Models\Public\MarketResult.cs" />
+    <Compile Include="Bittrex\Models\Public\MarketSummaryResult.cs" />
+    <Compile Include="Bittrex\Models\Public\OrderBookResult.cs" />
+    <Compile Include="Bittrex\Models\Public\Result.cs" />
+    <Compile Include="Bittrex\Models\Public\TickerResult.cs" />
+    <Compile Include="DoubleExtensions.cs" />
     <Compile Include="IExchange.cs" />
+    <Compile Include="Models\Buy.cs" />
+    <Compile Include="Models\CryptoBalance.cs" />
+    <Compile Include="Models\CryptoCurrency.cs" />
+    <Compile Include="Models\HistoricOrder.cs" />
+    <Compile Include="Models\CryptoMarket.cs" />
+    <Compile Include="Models\MarketHistory.cs" />
+    <Compile Include="Models\MarketSummary.cs" />
+    <Compile Include="Models\OpenOrder.cs" />
+    <Compile Include="Models\Order.cs" />
+    <Compile Include="Models\OrderId.cs" />
+    <Compile Include="Models\Sell.cs" />
+    <Compile Include="Models\Ticker.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Bittrex\Models\Account\" />
-    <Folder Include="Bittrex\Models\Market\" />
-    <Folder Include="Bittrex\Models\Public\" />
-    <Folder Include="Models\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>

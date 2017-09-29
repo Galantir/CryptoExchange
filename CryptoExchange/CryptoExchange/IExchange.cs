@@ -1,12 +1,17 @@
-﻿using System;
+﻿using CryptoExchange.Models;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CryptoExchange
 {
     public interface IExchange
     {
+        List<MarketSummary> GetMarketSummaries();
+        MarketSummary GetMarketSummary(CryptoMarket market);
+        List<MarketSummary> GetMarketSummaries(Func<MarketSummary, bool> predicate);
+
+
+        List<CryptoBalance> GetBalances(Func<CryptoBalance, bool> predicate);
+        List<CryptoBalance> GetBalances();
     }
 }

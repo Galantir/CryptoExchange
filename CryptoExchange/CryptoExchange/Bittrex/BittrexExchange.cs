@@ -22,22 +22,23 @@ namespace CryptoExchange.Bittrex
         {
             _apiKey = apiKey;
             _apiSecret = apiSecret;
+            _client = new RestClient(BASE_URL);
         }
 
         #region public
 
-        public List<Market> GetMarkets()
+        public List<CryptoMarket> GetMarkets()
         {
             IRestRequest request = new RestRequest("public/getmarkets", Method.GET);
             IRestResponse response = _client.Execute(request);
             return JsonConvert.DeserializeObject<MarketResult>(response.Content).result;
         }
 
-        public List<Market> GetMarkets(Func<Market, bool> predicate)
-        {
+        public List<CryptoMarket> GetMarkets(Func<CryptoMarket, bool> predicate)
+        {         
             IRestRequest request = new RestRequest("public/getmarkets", Method.GET);
             IRestResponse response = _client.Execute(request);
-            return JsonConvert.DeserializeObject<MarketResult>(response.Content).result.Where(predicate).ToList();
+            return JsonConvert.DeserializeObject<MarketResult>(response.Content).result.Where(predicate).ToList();           
         }
 
         public List<CryptoCurrency> GetCurrencies()
@@ -54,6 +55,13 @@ namespace CryptoExchange.Bittrex
             return JsonConvert.DeserializeObject<CurrencyResult>(response.Content).result.Where(predicate).ToList();
         }
 
+        public List<MarketSummary> GetMarketSummaries(Func<MarketSummary,bool> predicate)
+        {
+            IRestRequest request = new RestRequest("public/getmarketsummaries", Method.GET);
+            IRestResponse response = _client.Execute(request);
+            return JsonConvert.DeserializeObject<MarketSummaryResult>(response.Content).result.Where(predicate).ToList();
+        }
+
         public List<MarketSummary> GetMarketSummaries()
         {
             IRestRequest request = new RestRequest("public/getmarketsummaries", Method.GET);
@@ -61,7 +69,7 @@ namespace CryptoExchange.Bittrex
             return JsonConvert.DeserializeObject<MarketSummaryResult>(response.Content).result;
         }
 
-        public MarketSummary GetMarketSummary(Market market)
+        public MarketSummary GetMarketSummary(CryptoMarket market)
         {
             return GetMarketSummary(market.MarketName);
         }
@@ -74,7 +82,7 @@ namespace CryptoExchange.Bittrex
             return JsonConvert.DeserializeObject<MarketSummaryResult>(response.Content).result[0];
         }
 
-        public List<Buy> GetBuys(Market market)
+        public List<Buy> GetBuys(CryptoMarket market)
         {
             return GetBuys(market.MarketName);
         }
@@ -88,7 +96,7 @@ namespace CryptoExchange.Bittrex
             return JsonConvert.DeserializeObject<OrderBookResult>(response.Content).result.buy;
         }
 
-        public List<Sell> GetSells(Market market)
+        public List<Sell> GetSells(CryptoMarket market)
         {
             return GetSells(market.MarketName);
         }
@@ -102,7 +110,7 @@ namespace CryptoExchange.Bittrex
             return JsonConvert.DeserializeObject<OrderBookResult>(response.Content).result.sell;
         }
 
-        public List<MarketHistory> GetMarketHistory(Market market)
+        public List<MarketHistory> GetMarketHistory(CryptoMarket market)
         {
             return GetMarketHistory(market.MarketName);
         }
@@ -115,7 +123,7 @@ namespace CryptoExchange.Bittrex
             return JsonConvert.DeserializeObject<MarketHistoryResult>(response.Content).result;
         }
 
-        public Ticker GetTicker(Market market)
+        public Ticker GetTicker(CryptoMarket market)
         {
             return GetTicker(market.MarketName);
         }
@@ -132,7 +140,7 @@ namespace CryptoExchange.Bittrex
 
         #region market
 
-        public OrderId BuyLimit(Market market, double quantity, double rate)
+        public OrderId BuyLimit(CryptoMarket market, double quantity, double rate)
         {
             return BuyLimit(market.MarketName, quantity, rate);
         }
@@ -158,7 +166,7 @@ namespace CryptoExchange.Bittrex
             return JsonConvert.DeserializeObject<BuyLimitResult>(response.Content).result;
         }
 
-        public SellLimitResult SellLimit(Market market, double quantity, double rate)
+        public SellLimitResult SellLimit(CryptoMarket market, double quantity, double rate)
         {
             return SellLimit(market.MarketName, quantity, rate);
         }
@@ -206,7 +214,7 @@ namespace CryptoExchange.Bittrex
             return JsonConvert.DeserializeObject<CancelResult>(response.Content).success;
         }
 
-        public List<OpenOrder> GetOpenOrders(Market market)
+        public List<OpenOrder> GetOpenOrders(CryptoMarket market)
         {
             return GetOpenOrders(market.MarketName);
         }
@@ -232,9 +240,22 @@ namespace CryptoExchange.Bittrex
 
         #region account
 
+        public List<CryptoBalance> GetBalances(Func<CryptoBalance,bool> predicate)
+        {
+            Auth auth = Auth.Authenticate(_apiKey, _apiSecret, string.Format("https://bittrex.com/api/v1.1/account/getbalances"), null);
+
+            IRestRequest request = new RestRequest("account/getbalances", Method.GET);
+            request.AddQueryParameter("apikey", _apiKey);
+            request.AddQueryParameter("nonce", auth.Nonce.ToString());
+            request.AddHeader("apisign", auth.Sign);
+
+            IRestResponse response = _client.Execute(request);
+            return JsonConvert.DeserializeObject<BalancesResult>(response.Content).result.Where(predicate).ToList();
+        }
+
         public List<CryptoBalance> GetBalances()
         {
-            Auth auth = Auth.Authenticate(_apiKey, _apiSecret, string.Format("https://bittrex.com/api/v1.1/market/getbalances"), null);
+            Auth auth = Auth.Authenticate(_apiKey, _apiSecret, string.Format("https://bittrex.com/api/v1.1/account/getbalances"), null);
 
             IRestRequest request = new RestRequest("account/getbalances", Method.GET);
             request.AddQueryParameter("apikey", _apiKey);
@@ -255,7 +276,7 @@ namespace CryptoExchange.Bittrex
             Dictionary<string, string> parameters = new Dictionary<string, string>();
             parameters.Add("currency", currency);
 
-            Auth auth = Auth.Authenticate(_apiKey, _apiSecret, string.Format("https://bittrex.com/api/v1.1/market/getbalance"), parameters);
+            Auth auth = Auth.Authenticate(_apiKey, _apiSecret, string.Format("https://bittrex.com/api/v1.1/account/getbalance"), parameters);
 
             IRestRequest request = new RestRequest("account/getbalance", Method.GET);
             request.AddQueryParameter("apikey", _apiKey);
@@ -272,7 +293,7 @@ namespace CryptoExchange.Bittrex
             Dictionary<string, string> parameters = new Dictionary<string, string>();
             parameters.Add("market", market);
 
-            Auth auth = Auth.Authenticate(_apiKey, _apiSecret, string.Format("https://bittrex.com/api/v1.1/market/getorderhistory"), parameters);
+            Auth auth = Auth.Authenticate(_apiKey, _apiSecret, string.Format("https://bittrex.com/api/v1.1/account/getorderhistory"), parameters);
 
             IRestRequest request = new RestRequest("account/getorderhistory", Method.GET);
             request.AddQueryParameter("apikey", _apiKey);
