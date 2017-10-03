@@ -152,12 +152,14 @@ namespace CryptoExchange.Bittrex
 
         public OrderId BuyLimit(string market, double quantity, double rate)
         {
-            Dictionary<string, string> parameters = new Dictionary<string, string>();
-            parameters.Add("market", market);
-            parameters.Add("quantity", quantity.ToString());
-            parameters.Add("rate", rate.ToString());
+            Dictionary<string, string> parameters = new Dictionary<string, string>
+            {
+                { "market", market },
+                { "quantity", quantity.ToString() },
+                { "rate", rate.ToString() }
+            };
 
-            Auth auth = Auth.Authenticate(_apiKey, _apiSecret, string.Format("https://bittrex.com/api/v1.1/market/buylimit"), parameters);
+            Auth auth = Auth.Authenticate(_apiKey, _apiSecret, "https://bittrex.com/api/v1.1/market/buylimit", parameters);
 
             IRestRequest request = new RestRequest("market/buylimit", Method.GET);
             request.AddQueryParameter("apikey", _apiKey);
@@ -178,12 +180,14 @@ namespace CryptoExchange.Bittrex
 
         public OrderId SellLimit(string market, double quantity, double rate)
         {
-            Dictionary<string, string> parameters = new Dictionary<string, string>();
-            parameters.Add("market", market);
-            parameters.Add("quantity", quantity.ToString());
-            parameters.Add("rate", rate.ToString());
+            Dictionary<string, string> parameters = new Dictionary<string, string>
+            {
+                { "market", market },
+                { "quantity", quantity.ToString() },
+                { "rate", rate.ToString() }
+            };
 
-            Auth auth = Auth.Authenticate(_apiKey, _apiSecret, string.Format("https://bittrex.com/api/v1.1/market/selllimit"), parameters);
+            Auth auth = Auth.Authenticate(_apiKey, _apiSecret, "https://bittrex.com/api/v1.1/market/selllimit", parameters);
 
             IRestRequest request = new RestRequest("market/selllimit", Method.GET);
             request.AddQueryParameter("apikey", _apiKey);
@@ -204,10 +208,12 @@ namespace CryptoExchange.Bittrex
 
         public bool CancelOrder(string uuid)
         {
-            Dictionary<string, string> parameters = new Dictionary<string, string>();
-            parameters.Add("uuid", uuid);
+            Dictionary<string, string> parameters = new Dictionary<string, string>
+            {
+                { "uuid", uuid }
+            };
 
-            Auth auth = Auth.Authenticate(_apiKey, _apiSecret, string.Format("https://bittrex.com/api/v1.1/market/cancel"), parameters);
+            Auth auth = Auth.Authenticate(_apiKey, _apiSecret, "https://bittrex.com/api/v1.1/market/cancel", parameters);
 
             IRestRequest request = new RestRequest("market/cancel", Method.GET);
             request.AddQueryParameter("apikey", _apiKey);
@@ -226,10 +232,12 @@ namespace CryptoExchange.Bittrex
 
         public List<OpenOrder> GetOpenOrders(string market)
         {
-            Dictionary<string, string> parameters = new Dictionary<string, string>();
-            parameters.Add("market", market);
+            Dictionary<string, string> parameters = new Dictionary<string, string>
+            {
+                { "market", market }
+            };
 
-            Auth auth = Auth.Authenticate(_apiKey, _apiSecret, string.Format("https://bittrex.com/api/v1.1/market/getopenorders"), parameters);
+            Auth auth = Auth.Authenticate(_apiKey, _apiSecret, "https://bittrex.com/api/v1.1/market/getopenorders", parameters);
 
             IRestRequest request = new RestRequest("market/getopenorders", Method.GET);
             request.AddQueryParameter("apikey", _apiKey);
@@ -247,7 +255,7 @@ namespace CryptoExchange.Bittrex
 
         public List<CryptoBalance> GetBalances(Func<CryptoBalance,bool> predicate)
         {
-            Auth auth = Auth.Authenticate(_apiKey, _apiSecret, string.Format("https://bittrex.com/api/v1.1/account/getbalances"), null);
+            Auth auth = Auth.Authenticate(_apiKey, _apiSecret, "https://bittrex.com/api/v1.1/account/getbalances", null);
 
             IRestRequest request = new RestRequest("account/getbalances", Method.GET);
             request.AddQueryParameter("apikey", _apiKey);
@@ -260,7 +268,7 @@ namespace CryptoExchange.Bittrex
 
         public List<CryptoBalance> GetBalances()
         {
-            Auth auth = Auth.Authenticate(_apiKey, _apiSecret, string.Format("https://bittrex.com/api/v1.1/account/getbalances"), null);
+            Auth auth = Auth.Authenticate(_apiKey, _apiSecret, "https://bittrex.com/api/v1.1/account/getbalances", null);
 
             IRestRequest request = new RestRequest("account/getbalances", Method.GET);
             request.AddQueryParameter("apikey", _apiKey);
@@ -278,10 +286,12 @@ namespace CryptoExchange.Bittrex
 
         public CryptoBalance GetBalance(string currency)
         {
-            Dictionary<string, string> parameters = new Dictionary<string, string>();
-            parameters.Add("currency", currency);
+            Dictionary<string, string> parameters = new Dictionary<string, string>
+            {
+                { "currency", currency }
+            };
 
-            Auth auth = Auth.Authenticate(_apiKey, _apiSecret, string.Format("https://bittrex.com/api/v1.1/account/getbalance"), parameters);
+            Auth auth = Auth.Authenticate(_apiKey, _apiSecret, "https://bittrex.com/api/v1.1/account/getbalance", parameters);
 
             IRestRequest request = new RestRequest("account/getbalance", Method.GET);
             request.AddQueryParameter("apikey", _apiKey);
@@ -295,10 +305,12 @@ namespace CryptoExchange.Bittrex
 
         public List<HistoricOrder> GetOrderHistory(string market)
         {
-            Dictionary<string, string> parameters = new Dictionary<string, string>();
-            parameters.Add("market", market);
+            Dictionary<string, string> parameters = new Dictionary<string, string>
+            {
+                { "market", market }
+            };
 
-            Auth auth = Auth.Authenticate(_apiKey, _apiSecret, string.Format("https://bittrex.com/api/v1.1/account/getorderhistory"), parameters);
+            Auth auth = Auth.Authenticate(_apiKey, _apiSecret, "https://bittrex.com/api/v1.1/account/getorderhistory", parameters);
 
             IRestRequest request = new RestRequest("account/getorderhistory", Method.GET);
             request.AddQueryParameter("apikey", _apiKey);
@@ -312,10 +324,12 @@ namespace CryptoExchange.Bittrex
 
         public List<HistoricOrder> GetOrderHistory(CryptoMarket market)
         {
-            Dictionary<string, string> parameters = new Dictionary<string, string>();
-            parameters.Add("market", market.MarketName);
+            Dictionary<string, string> parameters = new Dictionary<string, string>
+            {
+                { "market", market.MarketName }
+            };
 
-            Auth auth = Auth.Authenticate(_apiKey, _apiSecret, string.Format("https://bittrex.com/api/v1.1/account/getorderhistory"), parameters);
+            Auth auth = Auth.Authenticate(_apiKey, _apiSecret, "https://bittrex.com/api/v1.1/account/getorderhistory", parameters);
 
             IRestRequest request = new RestRequest("account/getorderhistory", Method.GET);
             request.AddQueryParameter("apikey", _apiKey);
@@ -329,10 +343,12 @@ namespace CryptoExchange.Bittrex
 
         public Order GetOrder(string uuid)
         {
-            Dictionary<string, string> parameters = new Dictionary<string, string>();
-            parameters.Add("uuid", uuid);
+            Dictionary<string, string> parameters = new Dictionary<string, string>
+            {
+                { "uuid", uuid }
+            };
 
-            Auth auth = Auth.Authenticate(_apiKey, _apiSecret, string.Format("https://bittrex.com/api/v1.1/account/getorder"), parameters);
+            Auth auth = Auth.Authenticate(_apiKey, _apiSecret, "https://bittrex.com/api/v1.1/account/getorder", parameters);
 
             IRestRequest request = new RestRequest("account/getorder", Method.GET);
             request.AddQueryParameter("apikey", _apiKey);
