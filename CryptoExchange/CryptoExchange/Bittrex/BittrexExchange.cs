@@ -69,6 +69,11 @@ namespace CryptoExchange.Bittrex
             return JsonConvert.DeserializeObject<MarketSummaryResult>(response.Content).result;
         }
 
+        public double GetBTCUSDValue()
+        {
+            return GetMarketSummary("USDT-BTC").Last;
+        }
+
         public MarketSummary GetMarketSummary(CryptoMarket market)
         {
             return GetMarketSummary(market.MarketName);
@@ -166,12 +171,12 @@ namespace CryptoExchange.Bittrex
             return JsonConvert.DeserializeObject<BuyLimitResult>(response.Content).result;
         }
 
-        public SellLimitResult SellLimit(CryptoMarket market, double quantity, double rate)
+        public OrderId SellLimit(CryptoMarket market, double quantity, double rate)
         {
             return SellLimit(market.MarketName, quantity, rate);
         }
 
-        public SellLimitResult SellLimit(string market, double quantity, double rate)
+        public OrderId SellLimit(string market, double quantity, double rate)
         {
             Dictionary<string, string> parameters = new Dictionary<string, string>();
             parameters.Add("market", market);
@@ -189,7 +194,7 @@ namespace CryptoExchange.Bittrex
             request.AddHeader("apisign", auth.Sign);
 
             IRestResponse response = _client.Execute(request);
-            return JsonConvert.DeserializeObject<SellLimitResult>(response.Content);
+            return JsonConvert.DeserializeObject<SellLimitResult>(response.Content).result;
         }
 
         public bool CancelOrder(OpenOrder order)
@@ -299,6 +304,23 @@ namespace CryptoExchange.Bittrex
             request.AddQueryParameter("apikey", _apiKey);
             request.AddQueryParameter("nonce", auth.Nonce.ToString());
             request.AddQueryParameter("market", market);
+            request.AddHeader("apisign", auth.Sign);
+
+            IRestResponse response = _client.Execute(request);
+            return JsonConvert.DeserializeObject<OrderHistoryResult>(response.Content).result;
+        }
+
+        public List<HistoricOrder> GetOrderHistory(CryptoMarket market)
+        {
+            Dictionary<string, string> parameters = new Dictionary<string, string>();
+            parameters.Add("market", market.MarketName);
+
+            Auth auth = Auth.Authenticate(_apiKey, _apiSecret, string.Format("https://bittrex.com/api/v1.1/account/getorderhistory"), parameters);
+
+            IRestRequest request = new RestRequest("account/getorderhistory", Method.GET);
+            request.AddQueryParameter("apikey", _apiKey);
+            request.AddQueryParameter("nonce", auth.Nonce.ToString());
+            request.AddQueryParameter("market", market.MarketName);
             request.AddHeader("apisign", auth.Sign);
 
             IRestResponse response = _client.Execute(request);
